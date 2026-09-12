@@ -35,8 +35,7 @@ Young adults, students, and overachievers are constantly at risk of feeling unpu
 - **Libraries used:** FontAwesome / Iconify (for mascot vectors)
 - **Tools used:** VS Code, Git, GitHub, Web Speech API, Google Translate TTS API
 
-#### For Hardware:
-- *N/A (Pure Software Project)*
+
 
 ---
 
