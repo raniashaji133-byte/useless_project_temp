@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Aunty-Virus v1.0</title>
+
+<style>
+
+/* =========================================================
+   AUNTY-VIRUS v1.0
+   NEON GREEN + PITCH BLACK
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #000000;
+    --dark: #020602;
+    --green: #39ff14;
+    --light-green: #9aff87;
+    --dim-green: #4e9e45;
+    --border: #176d10;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background: #000000;
+    color: var(--green);
+    font-family: "Courier New", Courier, monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* CRT EFFECT */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(57,255,20,0.025),
+            rgba(57,255,20,0.025) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 998;
+    box-shadow: inset 0 0 120px rgba(0,0,0,0.95);
+}
+
+/* =========================================================
+   SCREENS
+========================================================= */
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    width: 100%;
+    padding: 30px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* =========================================================
+   BOOT SCREEN
+========================================================= */
+
+#bootScreen {
+    align-items: center;
+    justify-content: center;
+}
+
+.boot-box {
+    width: min(950px, 95vw);
+    min-height: 570px;
+    border: 1px solid #555;
+    padding: 38px;
+    position: relative;
+    background:
+        linear-gradient(
+            135deg,
+            #020402,
+            #000
+        );
+}
+
+.boot-title {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: bold;
+    letter-spacing: 5px;
+    color: #eeeeee;
+    margin-bottom: 20px;
+}
+
+.boot-subtitle {
+    color: #789176;
+    font-size: 1rem;
+    margin-bottom: 35px;
+}
+
+.boot-line {
+    color: #91a68d;
+    font-size: 0.95rem;
+    margin: 14px 0;
+}
+
+.boot-line .found {
+    color: #ffffff;
+}
+
+.boot-line .danger {
+    color: var(--green);
+}
+
+.boot-divider {
+    height: 9px;
+    background: #dddddd;
+    margin-top: 34px;
+    margin-bottom: 30px;
+}
+
+.enter-btn {
+    background: #eeeeee;
+    color: #000000;
+    border: none;
+    padding: 15px 27px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.enter-btn:hover {
+    background: var(--green);
+    box-shadow: 0 0 20px rgba(57,255,20,0.4);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.app-header {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo small {
+    display: block;
+    color: var(--dim-green);
+    font-size: 0.7rem;
+    font-weight: normal;
+    letter-spacing: 0;
+    margin-top: 5px;
+}
+
+.network {
+    color: var(--dim-green);
+    font-size: 0.75rem;
+}
+
+.network span {
+    color: var(--green);
+    text-shadow: 0 0 8px var(--green);
+}
+
+/* =========================================================
+   INPUT SCREEN
+========================================================= */
+
+#inputScreen {
+    flex-direction: column;
+}
+
+.input-container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+
+    border: 1px solid var(--border);
+    padding: 35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #020702,
+            #000
+        );
+}
+
+.section-title {
+    font-size: 1.05rem;
+    color: var(--green);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+label {
+    display: block;
+    color: var(--light-green);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+
+    background: #000000;
+    color: var(--light-green);
+
+    border: 1px solid var(--border);
+
+    padding: 15px;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+
+    outline: none;
+}
+
+textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 12px rgba(57,255,20,0.15);
+}
+
+textarea::placeholder {
+    color: #3e683a;
+}
+
+.counter {
+    text-align: right;
+    color: #427e3b;
+    font-size: 0.7rem;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   CHIPS
+========================================================= */
+
+.quick {
+    color: var(--dim-green);
+    font-size: 0.72rem;
+    margin: 22px 0 10px;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    background: #020802;
+    color: #75d96a;
+    border: 1px solid #126e0c;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 0.72rem;
+    cursor: pointer;
+}
+
+.chip:hover {
+    background: var(--green);
+    color: #000000;
+}
+
+/* =========================================================
+   SCAN BUTTON
+========================================================= */
+
+.scan-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 15px;
+
+    background: var(--green);
+    color: #000000;
+
+    border: none;
+
+    font-family: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.scan-btn:hover {
+    box-shadow: 0 0 20px rgba(57,255,20,0.4);
+}
+
+/* =========================================================
+   SCAN SCREEN
+========================================================= */
+
+#scanScreen {
+    align-items: center;
+    justify-content: center;
+}
+
+.scan-box {
+    width: min(850px, 95vw);
+
+    border: 1px solid var(--border);
+    padding: 30px;
+
+    background: #010401;
+}
+
+.scan-heading {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.terminal {
+    min-height: 260px;
+
+    border: 1px solid #0d4c09;
+
+    padding: 20px;
+
+    background: #000000;
+
+    color: #62c957;
+
+    line-height: 1.9;
+
+    font-size: 0.8rem;
+}
+
+.progress-bar {
+    height: 12px;
+
+    border: 1px solid var(--green);
+
+    padding: 2px;
+
+    margin-top: 20px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 10px var(--green);
+
+    transition: width 0.25s;
+}
+
+/* =========================================================
+   RESULT SCREEN
+========================================================= */
+
+#resultScreen {
+    flex-direction: column;
+}
+
+.result-container {
+    width: 100%;
+    max-width: 1000px;
+
+    margin: auto;
+
+    border: 1px solid var(--border);
+
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #020702,
+            #000
+        );
+}
+
+.result-grid {
+    display: grid;
+
+    grid-template-columns: 260px 1fr;
+
+    gap: 30px;
+}
+
+/* =========================================================
+   THREAT
+========================================================= */
+
+.threat-side {
+    border-right: 1px solid #104f0c;
+    padding-right: 30px;
+}
+
+.threat-title {
+    font-size: 0.7rem;
+    color: var(--dim-green);
+    line-height: 1.5;
+}
+
+.threat-number {
+    font-size: 4.5rem;
+    font-weight: bold;
+
+    margin: 10px 0;
+
+    text-shadow:
+        0 0 15px rgba(57,255,20,0.4);
+}
+
+.meter {
+    width: 100%;
+    height: 14px;
+
+    border: 1px solid var(--border);
+
+    padding: 2px;
+}
+
+.meter-fill {
+    height: 100%;
+    width: 0%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 8px var(--green);
+
+    transition: width 1s;
+}
+
+.threat-status {
+    border: 1px solid var(--green);
+
+    padding: 12px;
+
+    margin-top: 20px;
+
+    font-size: 0.72rem;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ROAST
+========================================================= */
+
+.roast-side {
+    display: flex;
+    flex-direction: column;
+}
+
+.result-label {
+    color: var(--dim-green);
+    font-size: 0.7rem;
+    margin-bottom: 15px;
+}
+
+.roast-box {
+    min-height: 185px;
+
+    border-top: 1px solid #145c0e;
+    border-bottom: 1px solid #145c0e;
+
+    display: flex;
+    align-items: center;
+
+    padding: 20px 5px;
+}
+
+.roast-text {
+    color: var(--light-green);
+
+    font-weight: bold;
+
+    line-height: 1.7;
+
+    font-size: 1rem;
+}
+
+.audio-status {
+    margin-top: 15px;
+
+    border: 1px solid #104f0c;
+
+    padding: 9px;
+
+    font-size: 0.7rem;
+
+    color: var(--green);
+}
+
+.result-source {
+    margin-top: 13px;
+
+    color: #417d3b;
+
+    font-size: 0.65rem;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 8px;
+
+    margin-top: 22px;
+}
+
+.action-btn {
+    padding: 12px 6px;
+
+    background: #010501;
+
+    color: #76d86b;
+
+    border: 1px solid #146f0e;
+
+    font-family: inherit;
+
+    font-size: 0.68rem;
+
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: var(--green);
+    color: #000000;
+}
+
+/* =========================================================
+   FAMILY SCREEN
+========================================================= */
+
+#familyScreen {
+    align-items: center;
+    justify-content: center;
+}
+
+.family-container {
+    width: min(720px, 95vw);
+
+    border: 1px solid var(--border);
+
+    background: #010401;
+
+    padding: 25px;
+}
+
+.family-title {
+    color: var(--green);
+
+    font-size: 0.9rem;
+
+    margin-bottom: 20px;
+}
+
+.whatsapp {
+    border: 1px solid #125c0c;
+
+    background:
+        linear-gradient(
+            135deg,
+            #061006,
+            #010401
+        );
+
+    padding: 20px;
+}
+
+.whatsapp-top {
+    border-bottom: 1px solid #145c0e;
+
+    padding-bottom: 13px;
+
+    margin-bottom: 15px;
+}
+
+.group-name {
+    color: var(--light-green);
+
+    font-weight: bold;
+}
+
+.members {
+    color: #4d9945;
+
+    font-size: 0.68rem;
+
+    margin-top: 4px;
+}
+
+.message {
+    border: 1px solid #16690f;
+
+    padding: 16px;
+
+    font-size: 0.8rem;
+
+    line-height: 1.7;
+
+    white-space: pre-line;
+
+    color: #b9ffaf;
+}
+
+.family-checks {
+    margin-top: 18px;
+}
+
+.check {
+    color: var(--green);
+
+    font-size: 0.73rem;
+
+    margin: 10px 0;
+}
+
+.takeover {
+    margin-top: 20px;
+
+    border: 1px solid var(--green);
+
+    padding: 13px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    color: var(--green);
+}
+
+.back-btn {
+    margin-top: 20px;
+
+    background: #010401;
+
+    color: var(--green);
+
+    border: 1px solid var(--green);
+
+    padding: 10px 18px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: var(--green);
+
+    color: #000000;
+}
+
+/* =========================================================
+   NEW AUNTY MASCOT
+========================================================= */
+
+.aunty-mascot {
+    position: fixed;
+
+    width: 190px;
+
+    height: auto;
+
+    z-index: 900;
+
+    pointer-events: none;
+
+    user-select: none;
+
+    display: none;
+
+    /*
+       Your uploaded AUNTY.png already contains
+       the speech bubble and background.
+    */
+
+    filter:
+        drop-shadow(
+            0 0 5px rgba(57,255,20,0.75)
+        )
+        drop-shadow(
+            0 0 14px rgba(57,255,20,0.35)
+        );
+}
+
+.aunty-mascot.visible {
+    display: block;
+
+    animation:
+        auntyRoaming
+        20s
+        ease-in-out
+        infinite;
+}
+
+/* =========================================================
+   AUNTY ROAMING
+========================================================= */
+
+@keyframes auntyRoaming {
+
+    0% {
+        left: 1vw;
+        top: 68vh;
+
+        transform:
+            rotate(-2deg)
+            scale(1);
+    }
+
+    10% {
+        left: 8vw;
+        top: 48vh;
+
+        transform:
+            rotate(2deg)
+            scale(1.03);
+    }
+
+    22% {
+        left: 20vw;
+        top: 12vh;
+
+        transform:
+            rotate(-1deg)
+            scale(1);
+    }
+
+    35% {
+        left: 43vw;
+        top: 5vh;
+
+        transform:
+            rotate(2deg)
+            scale(1.04);
+    }
+
+    48% {
+        left: 68vw;
+        top: 15vh;
+
+        transform:
+            rotate(-2deg)
+            scale(1);
+    }
+
+    60% {
+        left: 80vw;
+        top: 42vh;
+
+        transform:
+            rotate(2deg)
+            scale(1.03);
+    }
+
+    72% {
+        left: 70vw;
+        top: 70vh;
+
+        transform:
+            rotate(-2deg)
+            scale(1);
+    }
+
+    84% {
+        left: 42vw;
+        top: 78vh;
+
+        transform:
+            rotate(2deg)
+            scale(1.03);
+    }
+
+    94% {
+        left: 15vw;
+        top: 72vh;
+
+        transform:
+            rotate(-2deg)
+            scale(1);
+    }
+
+    100% {
+        left: 1vw;
+        top: 68vh;
+
+        transform:
+            rotate(-2deg)
+            scale(1);
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .screen {
+        padding: 15px;
+    }
+
+    .boot-box {
+        padding: 22px;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .threat-side {
+        border-right: none;
+
+        border-bottom:
+            1px solid #104f0c;
+
+        padding-right: 0;
+
+        padding-bottom: 25px;
+    }
+
+    .action-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .aunty-mascot {
+        width: 115px;
+    }
+
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     BOOT SCREEN
+========================================================= -->
+
+<section
+    id="bootScreen"
+    class="screen active">
+
+    <div class="boot-box">
+
+        <div class="boot-title">
+            AUNTY-VIRUS
+        </div>
+
+        <div class="boot-subtitle">
+            v1.0 — Relative Disapproval Detection System
+        </div>
+
+        <div class="boot-line">
+            &gt; Initializing family surveillance protocol...
+        </div>
+
+        <div class="boot-line">
+            &gt; Loading unsolicited opinions...
+        </div>
+
+        <div class="boot-line">
+            &gt; Searching for comparison material...
+        </div>
+
+        <div class="boot-line">
+            &gt; Cousin database ........
+            <span class="found">FOUND</span>
+        </div>
+
+        <div class="boot-line">
+            &gt; Family WhatsApp ........
+            <span class="found">CONNECTED</span>
+        </div>
+
+        <div class="boot-line">
+            &gt; Privacy ................
+            <span class="danger">NOT FOUND</span>
+        </div>
+
+        <div class="boot-line">
+            &gt; Aunty Network ..........
+            <span class="danger">ONLINE</span>
+        </div>
+
+        <div class="boot-divider"></div>
+
+        <button
+            class="enter-btn"
+            onclick="enterVirus()">
+
+            [ ENTER AUNTY-VIRUS ]
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ACHIEVEMENT INPUT
+========================================================= -->
+
+<section
+    id="inputScreen"
+    class="screen">
+
+    <header class="app-header">
+
+        <div class="logo">
+
+            AUNTY-VIRUS
+
+            <small>
+                v1.0 — Relative Disapproval Detection System
+            </small>
+
+        </div>
+
+        <div class="network">
+
+            &gt; AUNTY NETWORK:
+
+            <span>
+                ● CONNECTED
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <div class="input-container">
+
+        <div class="section-title">
+            // ACHIEVEMENT INPUT
+        </div>
+
+        <label for="achievement">
+            Enter your achievement to scan:
+        </label>
+
+        <textarea
+            id="achievement"
+            maxlength="200"
+            placeholder="e.g. I got placed in Infosys, Cracked SIH, Bought iPhone..."
+            oninput="updateCounter()"></textarea>
+
+        <div
+            class="counter"
+            id="counter">
+            0/200
+        </div>
+
+        <div class="quick">
+            QUICK ACHIEVEMENTS:
+        </div>
+
+        <div class="chips">
+
+            <button
+                class="chip"
+                onclick="setPreset('Campus Placement')">
+                Campus Placement
+            </button>
+
+            <button
+                class="chip"
+                onclick="setPreset('9.5 CGPA')">
+                9.5 CGPA
+            </button>
+
+            <button
+                class="chip"
+                onclick="setPreset('Won Hackathon')">
+                Won Hackathon
+            </button>
+
+            <button
+                class="chip"
+                onclick="setPreset('Bought Phone')">
+                Bought Phone
+            </button>
+
+            <button
+                class="chip"
+                onclick="setPreset('Moving to Canada')">
+                Moving to Canada
+            </button>
+
+            <button
+                class="chip"
+                onclick="setPreset('Cleared PSC')">
+                Cleared PSC
+            </button>
+
+        </div>
+
+        <button
+            class="scan-btn"
+            onclick="startScan()">
+
+            ⌕ &nbsp; SCAN FOR DISAPPROVAL
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SCANNING
+========================================================= -->
+
+<section
+    id="scanScreen"
+    class="screen">
+
+    <div class="scan-box">
+
+        <div class="scan-heading">
+            // AUNTY-VIRUS SCANNER ACTIVE
+        </div>
+
+        <div
+            class="terminal"
+            id="terminal">
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<section
+    id="resultScreen"
+    class="screen">
+
+    <header class="app-header">
+
+        <div class="logo">
+
+            AUNTY-VIRUS
+
+            <small>
+                THREAT ANALYSIS COMPLETE
+            </small>
+
+        </div>
+
+        <div class="network">
+
+            STATUS:
+
+            <span>
+                ● INFECTED
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <div class="result-container">
+
+        <div class="result-grid">
+
+
+            <!-- RELATIVE PRIDE -->
+
+            <div class="threat-side">
+
+                <div class="threat-title">
+                    RELATIVE PRIDE
+                    <br>
+                    THREAT LEVEL
+                </div>
+
+                <div
+                    class="threat-number"
+                    id="threatNumber">
+                    0%
+                </div>
+
+                <div class="meter">
+
+                    <div
+                        class="meter-fill"
+                        id="meterFill">
+                    </div>
+
+                </div>
+
+                <div class="threat-status">
+
+                    ⚠
+
+                    <br><br>
+
+                    THREAT DETECTED:
+
+                    <br>
+
+                    <strong>
+                        HIGH RELATIVE PRIDE
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROAST -->
+
+            <div class="roast-side">
+
+                <div class="result-label">
+                    // AUNTY RESPONSE GENERATED
+                </div>
+
+                <div class="roast-box">
+
+                    <div
+                        class="roast-text"
+                        id="roastText">
+
+                        Analyzing your achievement...
+
+                    </div>
+
+                </div>
+
+                <div class="audio-status">
+
+                    🔊 MALAYALAM AUNTY AUDIO:
+
+                    <span>
+                        READY
+                    </span>
+
+                </div>
+
+                <div class="result-source">
+
+                    SOURCE:
+                    <span id="source">
+                        LOCAL AUNTY NETWORK
+                    </span>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="action-grid">
+
+                    <button
+                        class="action-btn"
+                        onclick="hearAunty()">
+
+                        🔊 HEAR AUNTY
+
+                    </button>
+
+                    <button
+                        class="action-btn"
+                        onclick="anotherAunty()">
+
+                        ⟳ ANOTHER AUNTY
+
+                    </button>
+
+                    <button
+                        class="action-btn"
+                        onclick="mutateRoast()">
+
+                        🧬 MUTATE ROAST
+
+                    </button>
+
+                    <button
+                        class="action-btn"
+                        onclick="infectFamily()">
+
+                        📱 INFECT FAMILY GROUP
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NEW MASCOT
+         MUST BE NAMED AUNTY.png
+    ====================================================== -->
+
+    <img
+        id="auntyMascot"
+        class="aunty-mascot"
+        src="AUNTY.png"
+        alt="Aunty mascot">
+
+</section>
+
+
+
+<!-- =========================================================
+     FAMILY WHATSAPP
+========================================================= -->
+
+<section
+    id="familyScreen"
+    class="screen">
+
+    <div class="family-container">
+
+        <div class="family-title">
+            // FAMILY WHATSAPP PROTOCOL
+        </div>
+
+        <div class="whatsapp">
+
+            <div class="whatsapp-top">
+
+                <div class="group-name">
+                    🟢 Family Group
+                </div>
+
+                <div class="members">
+                    17 members
+                </div>
+
+            </div>
+
+
+            <div class="message">
+
+Ellarum arinjo?... namude kutti entho valiya sambhavam cheythittund.
+Details onnum ariyilla. Pakshe status ittirunnu.
+
+            </div>
+
+
+            <div class="family-checks">
+
+                <div class="check">
+                    ✓ Message forwarded to Family Group
+                </div>
+
+                <div class="check">
+                    ✓ Family notified
+                </div>
+
+                <div class="check">
+                    ✓ Cousin located
+                </div>
+
+                <div class="check">
+                    ✓ Comparison prepared
+                </div>
+
+                <div class="check">
+                    ✓ Unsolicited advice loaded
+                </div>
+
+            </div>
+
+
+            <div class="takeover">
+                STATUS: AUNTY HAS TAKEN OVER
+            </div>
+
+        </div>
+
+
+        <button
+            class="back-btn"
+            onclick="returnToResult()">
+
+            [ RETURN TO SCAN RESULT ]
+
+        </button>
+
+    </div>
+
+
+    <!-- FAMILY SCREEN MASCOT -->
+
+    <img
+        id="familyMascot"
+        class="aunty-mascot"
+        src="AUNTY.png"
+        alt="Aunty mascot">
+
+</section>
+
+
+
+<script>
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let currentCategory = "generic";
+
+let currentRoastIndex = 0;
+
+let currentRoast = null;
+
+let mutationLevel = 0;
+
+
+/* =========================================================
+   ROAST DATABASE
+   MULTIPLE OPTIONS PER ACHIEVEMENT
+========================================================= */
+
+const roastDatabase = {
+
+
+    /* =====================================================
+       JOB
+    ===================================================== */
+
+    job: [
+
+        {
+            display:
+            "Campus placement kittiyo? Athentha direct Off-campus try cheythaal kittaillayirunno? Suresh-inte mon-u Gulf-il 25 lakhs-aa starting package!",
+
+            audio:
+            "ആഹാ... ക്യാമ്പസ് പ്ലേസ്‌മെന്റ് കിട്ടിയോഓഓ? അതന്താ ഡയറക്ട് ഓഫ് ക്യാമ്പസ് ട്രൈ ചെയ്താൽ കിട്ടില്ലായിരുന്നോ? സുരേഷിന്റെ മോനു ഗൾഫിൽ 25 ലക്ഷം ആ സ്റ്റാർട്ടിങ് പാക്കേജ്!"
+        },
+
+        {
+            display:
+            "Placement kitti alle? Company nallathaano? Salary ethra? Oh... athra mathrame ullu? Ente cousin-te mon ithilum kooduthal vangunnund.",
+
+            audio:
+            "പ്ലേസ്‌മെന്റ് കിട്ടി അല്ലേ? കമ്പനി നല്ലതാണോ? സാലറി എത്ര? ഓ... അത്ര മാത്രമേ ഉള്ളൂ? എന്റെ കസിന്റെ മോൻ ഇതിലും കൂടുതൽ വാങ്ങുന്നുണ്ട്."
+        },
+
+        {
+            display:
+            "Joli kitti ennu kettappol santhosham thonni... pakshe permanent aano? Athu koodi nokkanam.",
+
+            audio:
+            "ജോലി കിട്ടി എന്ന് കേട്ടപ്പോൾ സന്തോഷം തോന്നി... പക്ഷേ പെർമനന്റ് ആണോ? അതുകൂടി നോക്കണം."
+        },
+
+        {
+            display:
+            "Company-il placement kitti alle? Nannayi. Pakshe promotion eppozha? Ithu starting alle.",
+
+            audio:
+            "കമ്പനിയിൽ പ്ലേസ്‌മെന്റ് കിട്ടി അല്ലേ? നന്നായി. പക്ഷേ പ്രമോഷൻ എപ്പോഴാ? ഇത് സ്റ്റാർട്ടിങ് അല്ലേ."
+        },
+
+        {
+            display:
+            "Salary ethra enn paranjille? Parayan pedi aano? Nammal family alle!",
+
+            audio:
+            "സാലറി എത്ര എന്ന് പറഞ്ഞില്ലേ? പറയാൻ പേടിയാണോ? നമ്മൾ ഫാമിലി അല്ലേ!"
+        }
+
+    ],
+
+
+    /* =====================================================
+       MARKS
+    ===================================================== */
+
+    marks: [
+
+        {
+            display:
+            "9.5 CGPA kittiyo? Sharikkum 10 kittenda samayatha! Answer sheet revaluation-u kodukku, engandum mark koodiyaalo.",
+
+            audio:
+            "ആഹാ... 9.5 സിജിപിഎ കിട്ടിയോ? ശരിക്കും 10 കിട്ടേണ്ട സമയത്താ! ആൻസർ ഷീറ്റ് റീവാലുവേഷന് കൊടുക്കൂ, എങ്ങണ്ടും മാർക്ക് കൂടിയാലോ."
+        },
+
+        {
+            display:
+            "9.5 okke nallatha... pakshe class-il first aaraayirunnu? Athu koodi nokkanam.",
+
+            audio:
+            "ഒൻപത് പോയിന്റ് അഞ്ച് ഒക്കെ നല്ലതാ... പക്ഷേ ക്ലാസിൽ ഫസ്റ്റ് ആരായിരുന്നു? അതുകൂടി നോക്കണം."
+        },
+
+        {
+            display:
+            "Marks nannayi vannittund... ennalum next semester kurachu koodi serious aayal 10 vare edukkaamallo.",
+
+            audio:
+            "മാർക്ക് നന്നായി വന്നിട്ടുണ്ട്... എന്നാലും അടുത്ത സെമസ്റ്റർ കുറച്ചുകൂടി സീരിയസ് ആയാൽ പത്ത് വരെ എടുക്കാമല്ലോ."
+        },
+
+        {
+            display:
+            "Aahaa... 9.5! Nannayi. Pakshe 10 edukkan pattiyille? Oru half mark alle kuravullathu.",
+
+            audio:
+            "ആഹാ... ഒൻപത് പോയിന്റ് അഞ്ച്! നന്നായി. പക്ഷേ പത്ത് എടുക്കാൻ പറ്റിയില്ലേ? ഒരു ഹാഫ് മാർക്ക് അല്ലേ കുറവുള്ളത്."
+        },
+
+        {
+            display:
+            "Ithra mark kitti ennu parayunnu... result slip kaanichu nokkatte. Veruthe parayunnathaano ennu ariyallo.",
+
+            audio:
+            "ഇത്ര മാർക്ക് കിട്ടി എന്ന് പറയുന്നു... റിസൾട്ട് സ്ലിപ്പ് കാണിച്ചു നോക്കട്ടെ. വെറുതെ പറയുന്നതാണോ എന്ന് അറിയാല്ലോ."
+        }
+
+    ],
+
+
+    /* =====================================================
+       HACKATHON
+    ===================================================== */
+
+    hackathon: [
+
+        {
+            display:
+            "Hackathon jeyichu ennu paranjaal... entha, Certificate mathramo atho sthiram joliyum kittumo?",
+
+            audio:
+            "ഹ്മ്മ്... ഹാക്കത്തൺ ജയിച്ചു എന്ന് പറഞ്ഞാൽ... എന്താ, സർട്ടിഫിക്കറ്റ് മാത്രമോ അതോ സ്ഥിരം ജോലിയും കിട്ടുമോ?"
+        },
+
+        {
+            display:
+            "Prize kittiyalle? Nannayi... pakshe ithokke padichittu enthanu actual benefit?",
+
+            audio:
+            "പ്രൈസ് കിട്ടിയല്ലേ? നന്നായി... പക്ഷേ ഇതൊക്കെ പഠിച്ചിട്ട് എന്താണ് ആക്ച്വൽ ബെനിഫിറ്റ്?"
+        },
+
+        {
+            display:
+            "Hackathon winner aanalle? Aahaa... appo job placement um already aayo? Athalle main achievement.",
+
+            audio:
+            "ഹാക്കത്തൺ വിന്നർ ആണല്ലേ? ആഹാ... അപ്പോൾ ജോബ് പ്ലേസ്മെന്റും ഇതിനകം ആയോ? അതല്ലേ മെയിൻ അച്ചീവ്മെന്റ്."
+        },
+
+        {
+            display:
+            "Certificate okke frame cheythu vecholu... pakshe veettil aarenkilum chodichaal 'joli kitti' enn parayalle.",
+
+            audio:
+            "സർട്ടിഫിക്കറ്റ് ഒക്കെ ഫ്രെയിം ചെയ്തു വെച്ചോളൂ... പക്ഷേ വീട്ടിൽ ആരെങ്കിലും ചോദിച്ചാൽ ജോലി കിട്ടി എന്ന് പറയല്ലേ."
+        },
+
+        {
+            display:
+            "Hackathon aano? Nannayi. Pakshe ethra per compete cheythu? First vannath kond mathram valiya sambhavam aano?",
+
+            audio:
+            "ഹാക്കത്തൺ ആണോ? നന്നായി. പക്ഷേ എത്ര പേർ കോമ്പീറ്റ് ചെയ്തു? ഫസ്റ്റ് വന്നത് കൊണ്ട് മാത്രം വലിയ സംഭവം ആണോ?"
+        },
+
+        {
+            display:
+            "Hackathon prize kitti alle? Ithu vechittu placement guarantee undo? Athu nokkiyittu parayam.",
+
+            audio:
+            "ഹാക്കത്തൺ പ്രൈസ് കിട്ടി അല്ലേ? ഇത് വെച്ചിട്ട് പ്ലേസ്മെന്റ് ഗ്യാരന്റി ഉണ്ടോ? അത് നോക്കിയിട്ട് പറയാം."
+        }
+
+    ],
+
+
+    /* =====================================================
+       GADGET
+    ===================================================== */
+
+    gadget: [
+
+        {
+            display:
+            "Puthiya phone vaangiyo? Ithoru waste-aannu! Pusthakam vaangikkaan cash milla, ithinokke evidunnu kittunno!",
+
+            audio:
+            "അയ്യോ... പുതിയ ഫോൺ വാങ്ങിയോ? ഇതൊരു വേസ്റ്റാണ്! പുസ്തകം വാങ്ങിക്കാൻ പറഞ്ഞാൽ ക്യാഷില്ല, ഇതിനൊക്കെ എവിടുന്ന് കിട്ടുന്നോ!"
+        },
+
+        {
+            display:
+            "Ithra expensive phone enthina? Call cheyyanum WhatsApp use cheyyanum alle? Athinu ente phone thanne mathi.",
+
+            audio:
+            "ഇത്ര എക്സ്പെൻസീവ് ഫോൺ എന്തിനാ? കോൾ ചെയ്യാനും വാട്സാപ്പ് ഉപയോഗിക്കാനും അല്ലേ? അതിന് എന്റെ ഫോൺ തന്നെ മതി."
+        },
+
+        {
+            display:
+            "Phone nallathaanu... pakshe battery ethra neram nilkkum? Ente old phone ippolum super aanu.",
+
+            audio:
+            "ഫോൺ നല്ലതാണ്... പക്ഷേ ബാറ്ററി എത്ര നേരം നിൽക്കും? എന്റെ ഓൾഡ് ഫോൺ ഇപ്പോഴും സൂപ്പർ ആണ്."
+        },
+
+        {
+            display:
+            "Puthiya phone alle? Camera nallathaanennu parayunnu... athukondu entha prayojanam? Photo edukkan alle?",
+
+            audio:
+            "പുതിയ ഫോൺ അല്ലേ? ക്യാമറ നല്ലതാണെന്ന് പറയുന്നു... അതുകൊണ്ട് എന്താ പ്രയോജനം? ഫോട്ടോ എടുക്കാൻ അല്ലേ?"
+        }
+
+    ],
+
+
+    /* =====================================================
+       ABROAD
+    ===================================================== */
+
+    abroad: [
+
+        {
+            display:
+            "Canada-ykku pokaan aano plan? Avide ippo aarkkum joliyilla ennu news-il kandallo! Athilum nallathu ivide valla Govt job-inum try cheyyunnatha.",
+
+            audio:
+            "അയ്യോ... കാനഡയ്ക്ക് പോകാൻ ആണോ പ്ലാൻ? അവിടെ ഇപ്പോൾ ആർക്കും ജോലിയില്ല എന്ന് ന്യൂസിൽ കണ്ടല്ലോ! അതിലും നല്ലത് ഇവിടെ വല്ല ഗവൺമെന്റ് ജോബിനും ട്രൈ ചെയ്യുന്നതാ."
+        },
+
+        {
+            display:
+            "Abroad pokuvaano? Nannayi... pakshe ivide oru government job kittiyirunnenkil athayirunnu safest.",
+
+            audio:
+            "അബ്രോഡ് പോകുവാണോ? നന്നായി... പക്ഷേ ഇവിടെ ഒരു ഗവൺമെന്റ് ജോലി കിട്ടിയിരുന്നെങ്കിൽ അതായിരുന്നു സേഫസ്റ്റ്."
+        },
+
+        {
+            display:
+            "Canada okke poyi entha cheyyuka? Ivide thanne nalla joli nokkiyal porayirunno?",
+
+            audio:
+            "കാനഡ ഒക്കെ പോയി എന്താ ചെയ്യുക? ഇവിടെ തന്നെ നല്ല ജോലി നോക്കിയാൽ പോരായിരുന്നോ?"
+        },
+
+        {
+            display:
+            "Foreign pokunnu ennu kettappol santhosham und... pakshe veettil varumbol entha konduvarunnathennu nokkam.",
+
+            audio:
+            "ഫോറിൻ പോകുന്നു എന്ന് കേട്ടപ്പോൾ സന്തോഷം ഉണ്ട്... പക്ഷേ വീട്ടിൽ വരുമ്പോൾ എന്താ കൊണ്ടുവരുന്നതെന്ന് നോക്കാം."
+        }
+
+    ],
+
+
+    /* =====================================================
+       PSC
+    ===================================================== */
+
+    psc: [
+
+        {
+            display:
+            "IT joliyo? Athoke eppozha poovukennu parayaan pattilla. PSC ezhuthiyittille? Govt job-inte aashvasam vereya!",
+
+            audio:
+            "ആഹാ... ഐടി ജോലിയോ? അതൊക്കെ എപ്പോഴാ പോകുക എന്ന് പറയാൻ പറ്റില്ല. പിഎസ്സി എഴുതിയിട്ടില്ലേ? ഗവൺമെന്റ് ജോബിന്റെ ആശ്വാസം വേറെയാ!"
+        },
+
+        {
+            display:
+            "PSC rank vannille? Athinu vendi iniyum kurachu padikkanam. Ente ayalvasi-yude mol randu thavana ezhuthi.",
+
+            audio:
+            "പിഎസ്സി റാങ്ക് വന്നില്ലേ? അതിന് വേണ്ടി ഇനിയും കുറച്ച് പഠിക്കണം. എന്റെ അയൽവാസിയുടെ മോൾ രണ്ട് തവണ എഴുതി."
+        },
+
+        {
+            display:
+            "PSC try cheyyunnundalle? Nannayi. Pakshe ethu rank aanu? Rank illenkil pinne entha kaaryam?",
+
+            audio:
+            "പിഎസ്സി ട്രൈ ചെയ്യുന്നുണ്ടല്ലേ? നന്നായി. പക്ഷേ ഏത് റാങ്ക് ആണ്? റാങ്ക് ഇല്ലെങ്കിൽ പിന്നെ എന്താ കാര്യം?"
+        }
+
+    ],
+
+
+    /* =====================================================
+       COOKING
+    ===================================================== */
+
+    cooking: [
+
+        {
+            display:
+            "Cake undakkiya? Enkilum chorum curry-yum undakkaan ariyamenkil mathrame valya kaaryam ullu!",
+
+            audio:
+            "ആഹാ... കേക്ക് ഉണ്ടാക്കിയോ? എങ്കിലും ചോറും കറിയും ഉണ്ടാക്കാൻ അറിയാമെങ്കിൽ മാത്രമേ വലിയ കാര്യമുള്ളൂ!"
+        },
+
+        {
+            display:
+            "Instagram-il cake undakki post cheyyan ariyaam... pakshe veettil innathe curry entha ennu chodichaal ariyilla alle?",
+
+            audio:
+            "ഇൻസ്റ്റഗ്രാമിൽ കേക്ക് ഉണ്ടാക്കി പോസ്റ്റ് ചെയ്യാൻ അറിയാം... പക്ഷേ വീട്ടിൽ ഇന്നത്തെ കറി എന്താണെന്ന് ചോദിച്ചാൽ അറിയില്ല അല്ലേ?"
+        },
+
+        {
+            display:
+            "Cake nannayittundennu parayunnu... taste cheythu nokkiyittano? Atho photo mathram kandittano?",
+
+            audio:
+            "കേക്ക് നന്നായിട്ടുണ്ട് എന്ന് പറയുന്നു... ടേസ്റ്റ് ചെയ്തു നോക്കിയിട്ടാണോ? അതോ ഫോട്ടോ മാത്രം കണ്ടിട്ടാണോ?"
+        }
+
+    ],
+
+
+    /* =====================================================
+       FITNESS
+    ===================================================== */
+
+    fitness: [
+
+        {
+            display:
+            "Gym-il poyittu shariram undakkiya? Athukondu valla gunavum undo? Ente mon ravile 5-nu ezhunnettu parambil paniyedukkum!",
+
+            audio:
+            "മ്മ്മ്... ജിമ്മിൽ പോയിട്ട് ശരീരം ഉണ്ടാക്കിയോ? അതുകൊണ്ട് വല്ല ഗുണവും ഉണ്ടോ? എന്റെ മോൻ രാവിലെ 5ന് എഴുന്നേറ്റു പറമ്പിൽ പണിയെടുക്കും!"
+        },
+
+        {
+            display:
+            "Gym membership eduthittundo? Atho randu divasam poyi pinne selfie mathram aano?",
+
+            audio:
+            "ജിം മെമ്പർഷിപ്പ് എടുത്തിട്ടുണ്ടോ? അതോ രണ്ട് ദിവസം പോയി പിന്നെ സെൽഫി മാത്രം ആണോ?"
+        },
+
+        {
+            display:
+            "Workout okke cheyyunnundalle? Nannayi. Pakshe food control cheyyunnundo? Athaanallo main.",
+
+            audio:
+            "വർക്ക്‌ഔട്ട് ഒക്കെ ചെയ്യുന്നുണ്ടല്ലേ? നന്നായി. പക്ഷേ ഫുഡ് കൺട്രോൾ ചെയ്യുന്നുണ്ടോ? അതാണല്ലോ മെയിൻ."
+        }
+
+    ],
+
+
+    /* =====================================================
+       SOCIAL
+    ===================================================== */
+
+    social: [
+
+        {
+            display:
+            "Followers okke ulla karyam kollaam... pakshe ithonnum kondu ari vangaan pattillallo! Valla sthiram joliyum nokkikode.",
+
+            audio:
+            "അയ്യോ... ഫോളോവേഴ്സ് ഒക്കെ ഉള്ള കാര്യം കൊള്ളാം... പക്ഷേ ഇതൊന്നും കൊണ്ട് അരി വാങ്ങാൻ പറ്റിയില്ലല്ലോ! വല്ല സ്ഥിരം ജോലിയും നോക്കിക്കൂടെ."
+        },
+
+        {
+            display:
+            "Views okke vannu... ini athu cash aayi convert cheyyan pattumo? Athaanallo main question.",
+
+            audio:
+            "വ്യൂസ് ഒക്കെ വന്നു... ഇനി അത് ക്യാഷ് ആയി കൺവേർട്ട് ചെയ്യാൻ പറ്റുമോ? അതാണല്ലോ മെയിൻ ക്വസ്റ്റ്യൻ."
+        },
+
+        {
+            display:
+            "Instagram-il famous aanalle? Nannayi. Pakshe real life-il aarenkilum ariyumo?",
+
+            audio:
+            "ഇൻസ്റ്റഗ്രാമിൽ ഫേമസ് ആണല്ലേ? നന്നായി. പക്ഷേ റിയൽ ലൈഫിൽ ആരെങ്കിലും അറിയുമോ?"
+        }
+
+    ],
+
+
+    /* =====================================================
+       LICENSE
+    ===================================================== */
+
+    license: [
+
+        {
+            display:
+            "License kittiyo? Enkilum road-il irakkumbol oru shradha venam. Ente mol single chance-il eduthatha!",
+
+            audio:
+            "ആഹാ... ലൈസൻസ് കിട്ടിയോ? എങ്കിലും റോഡിൽ ഇറക്കുമ്പോൾ ഒരു ശ്രദ്ധ വേണം. എന്റെ മോൾ സിംഗിൾ ചാൻസിൽ എടുത്തതാ!"
+        },
+
+        {
+            display:
+            "License kitti enn paranjal driver aayi ennalla. Parking okke nannayi padichittundo?",
+
+            audio:
+            "ലൈസൻസ് കിട്ടി എന്ന് പറഞ്ഞാൽ ഡ്രൈവർ ആയി എന്നല്ല. പാർക്കിംഗ് ഒക്കെ നന്നായി പഠിച്ചിട്ടുണ്ടോ?"
+        }
+
+    ],
+
+
+    /* =====================================================
+       GENERIC
+    ===================================================== */
+
+    generic: [
+
+        {
+            display:
+            "Mmm... kettittu valya karyam aayi thonnunnilla. B.Tech kazhinju entha adutha plan?",
+
+            audio:
+            "മ്മ്മ്... കേട്ടിട്ടു വലിയ കാര്യം ആയി തോന്നുന്നില്ല. ബി ടെക് കഴിഞ്ഞു എന്താ അടുത്ത പ്ലാൻ?"
+        },
+
+        {
+            display:
+            "Nannayi... nannayi... ennalum ithokke kond entha future plan? Athu koodi parayu.",
+
+            audio:
+            "നന്നായി... നന്നായി... എന്നാലും ഇതൊക്കെ കൊണ്ട് എന്താ ഫ്യൂച്ചർ പ്ലാൻ? അതുകൂടി പറയൂ."
+        },
+
+        {
+            display:
+            "Achievement undakkiyallo... ini athil over confidence varathe nokkanam ketto.",
+
+            audio:
+            "അച്ചീവ്മെന്റ് ഉണ്ടാക്കിയല്ലോ... ഇനി അതിൽ ഓവർ കോൺഫിഡൻസ് വരാതെ നോക്കണം കേട്ടോ."
+        },
+
+        {
+            display:
+            "Aahaa... ithaanalle achievement? Nannayi. Pakshe athukondu life-il entha maatam vannathu?",
+
+            audio:
+            "ആഹാ... ഇതാണല്ലേ അച്ചീവ്മെന്റ്? നന്നായി. പക്ഷേ അതുകൊണ്ട് ലൈഫിൽ എന്താ മാറ്റം വന്നത്?"
+        },
+
+        {
+            display:
+            "Sheri... congratulations. Pakshe ithokke veettil paranjittu entha response kittiyathu?",
+
+            audio:
+            "ശരി... കോൺഗ്രാച്ചുലേഷൻസ്. പക്ഷേ ഇതൊക്കെ വീട്ടിൽ പറഞ്ഞിട്ട് എന്താ റെസ്പോൺസ് കിട്ടിയത്?"
+        }
+
+    ]
+
+};
+
+
+/* =========================================================
+   MUTATION PREFIXES
+========================================================= */
+
+const mutationPrefixes = [
+
+    {
+        display: "Mmm... ",
+
+        audio: "മ്മ്മ്... "
+    },
+
+    {
+        display:
+        "Aahaa... nannayi... pakshe ",
+
+        audio:
+        "ആഹാ... നന്നായി... പക്ഷേ "
+    },
+
+    {
+        display:
+        "Sheri sherii... ennalum ",
+
+        audio:
+        "ശരി ശരി... എന്നാലും "
+    },
+
+    {
+        display:
+        "Congrats okke und... pakshe ",
+
+        audio:
+        "കോൺഗ്രാറ്റ്സ് ഒക്കെ ഉണ്ട്... പക്ഷേ "
+    }
+
+];
+
+
+/* =========================================================
+   SCREEN CONTROL
+========================================================= */
+
+function showScreen(id) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+
+            screen.classList.remove("active");
+
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+function enterVirus() {
+
+    hideMascots();
+
+    showScreen("inputScreen");
+}
+
+
+/* =========================================================
+   MASCOT CONTROL
+========================================================= */
+
+function hideMascots() {
+
+    document
+        .querySelectorAll(".aunty-mascot")
+        .forEach(mascot => {
+
+            mascot.classList.remove("visible");
+
+        });
+}
+
+
+function showResultMascot() {
+
+    hideMascots();
+
+    document
+        .getElementById("auntyMascot")
+        .classList.add("visible");
+}
+
+
+function showFamilyMascot() {
+
+    hideMascots();
+
+    document
+        .getElementById("familyMascot")
+        .classList.add("visible");
+}
+
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+function updateCounter() {
+
+    const value =
+        document
+            .getElementById("achievement")
+            .value;
+
+    document
+        .getElementById("counter")
+        .textContent =
+        value.length + "/200";
+}
+
+
+/* =========================================================
+   PRESETS
+========================================================= */
+
+function setPreset(text) {
+
+    document
+        .getElementById("achievement")
+        .value = text;
+
+    updateCounter();
+}
+
+
+/* =========================================================
+   CATEGORY DETECTION
+========================================================= */
+
+function detectCategory(text) {
+
+    const t =
+        text.toLowerCase();
+
+
+    if (
+        t.includes("canada") ||
+        t.includes("abroad") ||
+        t.includes("uk") ||
+        t.includes("usa") ||
+        t.includes("foreign") ||
+        t.includes("visa")
+    )
+        return "abroad";
+
+
+    if (
+        t.includes("psc") ||
+        t.includes("govt") ||
+        t.includes("government") ||
+        t.includes("upsc")
+    )
+        return "psc";
+
+
+    if (
+        t.includes("cake") ||
+        t.includes("cook") ||
+        t.includes("bake") ||
+        t.includes("food")
+    )
+        return "cooking";
+
+
+    if (
+        t.includes("gym") ||
+        t.includes("fitness") ||
+        t.includes("workout")
+    )
+        return "fitness";
+
+
+    if (
+        t.includes("follower") ||
+        t.includes("instagram") ||
+        t.includes("youtube") ||
+        t.includes("views") ||
+        t.includes("viral")
+    )
+        return "social";
+
+
+    if (
+        t.includes("license") ||
+        t.includes("licence") ||
+        t.includes("driving")
+    )
+        return "license";
+
+
+    if (
+        t.includes("phone") ||
+        t.includes("iphone") ||
+        t.includes("laptop") ||
+        t.includes("macbook") ||
+        t.includes("bought")
+    )
+        return "gadget";
+
+
+    if (
+        t.includes("hackathon") ||
+        t.includes("sih") ||
+        t.includes("winner") ||
+        t.includes("won") ||
+        t.includes("prize")
+    )
+        return "hackathon";
+
+
+    if (
+        t.includes("cgpa") ||
+        t.includes("mark") ||
+        t.includes("score") ||
+        t.includes("rank") ||
+        t.includes("grade")
+    )
+        return "marks";
+
+
+    if (
+        t.includes("job") ||
+        t.includes("placement") ||
+        t.includes("placed") ||
+        t.includes("offer") ||
+        t.includes("company") ||
+        t.includes("infosys") ||
+        t.includes("tcs") ||
+        t.includes("salary") ||
+        t.includes("package")
+    )
+        return "job";
+
+
+    return "generic";
+}
+
+
+/* =========================================================
+   THREAT
+========================================================= */
+
+function calculateThreat() {
+
+    return Math.floor(
+        Math.random() * 20
+    ) + 80;
+}
+
+
+/* =========================================================
+   START SCAN
+========================================================= */
+
+function startScan() {
+
+    const input =
+        document
+            .getElementById("achievement")
+            .value
+            .trim();
+
+
+    if (!input) {
+
+        alert(
+            "Aunty says: 'Onnum cheythillenkil entha scan cheyyande?'"
+        );
+
+        return;
+    }
+
+
+    currentCategory =
+        detectCategory(input);
+
+
+    currentRoastIndex = 0;
+
+    mutationLevel = 0;
+
+    hideMascots();
+
+    showScreen("scanScreen");
+
+
+    const terminal =
+        document
+            .getElementById("terminal");
+
+
+    const progress =
+        document
+            .getElementById("progressFill");
+
+
+    terminal.innerHTML = "";
+
+    progress.style.width = "0%";
+
+
+    const messages = [
+
+        "> Reading achievement data...",
+
+        "> Measuring relative pride...",
+
+        "> Searching cousin database...",
+
+        "> Consulting Aunty Network...",
+
+        "> Comparing with neighbour's children...",
+
+        "> Preparing unsolicited opinion...",
+
+        "> FINALIZING DISAPPROVAL..."
+
+    ];
+
+
+    let index = 0;
+
+
+    const interval =
+        setInterval(() => {
+
+            if (
+                index < messages.length
+            ) {
+
+                const line =
+                    document.createElement("div");
+
+
+                line.textContent =
+                    messages[index];
+
+
+                terminal.appendChild(line);
+
+
+                progress.style.width =
+                    (
+                        (index + 1) /
+                        messages.length *
+                        100
+                    ) + "%";
+
+
+                index++;
+
+            }
+
+            else {
+
+                clearInterval(interval);
+
+                showResult();
+
+            }
+
+        }, 380);
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function showResult() {
+
+    showScreen("resultScreen");
+
+
+    const threat =
+        calculateThreat();
+
+
+    const options =
+        roastDatabase[currentCategory];
+
+
+    currentRoast =
+        options[currentRoastIndex];
+
+
+    document
+        .getElementById("threatNumber")
+        .textContent =
+        threat + "%";
+
+
+    document
+        .getElementById("meterFill")
+        .style.width =
+        threat + "%";
+
+
+    document
+        .getElementById("roastText")
+        .textContent =
+        '"' +
+        currentRoast.display +
+        '"';
+
+
+    document
+        .getElementById("source")
+        .textContent =
+        "LOCAL AUNTY NETWORK";
+
+
+    showResultMascot();
+
+
+    setTimeout(() => {
+
+        playAuntyVoice(
+            currentRoast.audio
+        );
+
+    }, 500);
+}
+
+
+/* =========================================================
+   MALAYALAM AUNTY VOICE
+========================================================= */
+
+function playAuntyVoice(text) {
+
+    /*
+       Stop previous browser speech.
+    */
+
+    if (
+        "speechSynthesis" in window
+    ) {
+
+        window
+            .speechSynthesis
+            .cancel();
+    }
+
+
+    /*
+       Google Malayalam TTS is attempted first.
+       This gives a much more natural Malayalam
+       pronunciation than the robotic fallback.
+    */
+
+    const audioUrl =
+        "https://translate.google.com/translate_tts" +
+        "?ie=UTF-8" +
+        "&q=" +
+        encodeURIComponent(text) +
+        "&tl=ml" +
+        "&client=tw-ob";
+
+
+    const audio =
+        new Audio(audioUrl);
+
+
+    audio.volume = 1;
+
+
+    audio.play()
+        .catch(() => {
+
+            /*
+               Browser fallback.
+            */
+
+            if (
+                "speechSynthesis" in window
+            ) {
+
+                const utterance =
+                    new SpeechSynthesisUtterance(text);
+
+
+                utterance.lang =
+                    "ml-IN";
+
+
+                /*
+                   Slightly slow and higher-pitched
+                   to make it sound more like
+                   an intrusive aunty.
+                */
+
+                utterance.rate =
+                    0.80;
+
+                utterance.pitch =
+                    1.35;
+
+
+                window
+                    .speechSynthesis
+                    .speak(utterance);
+            }
+
+        });
+}
+
+
+/* =========================================================
+   HEAR AUNTY
+========================================================= */
+
+function hearAunty() {
+
+    if (!currentRoast)
+        return;
+
+
+    playAuntyVoice(
+        currentRoast.audio
+    );
+}
+
+
+/* =========================================================
+   ANOTHER AUNTY
+========================================================= */
+
+function anotherAunty() {
+
+    if (!currentRoast)
+        return;
+
+
+    const options =
+        roastDatabase[currentCategory];
+
+
+    currentRoastIndex =
+        (
+            currentRoastIndex + 1
+        ) %
+        options.length;
+
+
+    currentRoast =
+        options[currentRoastIndex];
+
+
+    mutationLevel = 0;
+
+
+    document
+        .getElementById("roastText")
+        .textContent =
+        '"' +
+        currentRoast.display +
+        '"';
+
+
+    document
+        .getElementById("source")
+        .textContent =
+        "DIFFERENT AUNTY DETECTED";
+
+
+    playAuntyVoice(
+        currentRoast.audio
+    );
+}
+
+
+/* =========================================================
+   MUTATE ROAST
+========================================================= */
+
+function mutateRoast() {
+
+    if (!currentRoast)
+        return;
+
+
+    mutationLevel++;
+
+
+    const prefixIndex =
+        Math.min(
+            mutationLevel - 1,
+            mutationPrefixes.length - 1
+        );
+
+
+    const prefix =
+        mutationPrefixes[prefixIndex];
+
+
+    let display =
+        prefix.display +
+        currentRoast.display;
+
+
+    let audio =
+        prefix.audio +
+        currentRoast.audio;
+
+
+    /*
+       Higher mutation levels become
+       increasingly unnecessary.
+    */
+
+    if (
+        mutationLevel >= 3
+    ) {
+
+        display +=
+            " Athu mathram alla...";
+
+        audio +=
+            " അതുമാത്രമല്ല...";
+
+    }
+
+
+    if (
+        mutationLevel >= 4
+    ) {
+
+        display +=
+            " Njan paranjathaanu nallathu.";
+
+        audio +=
+            " ഞാൻ പറഞ്ഞതാണ് നല്ലത്.";
+
+    }
+
+
+    currentRoast = {
+
+        display:
+            display,
+
+        audio:
+            audio
+
+    };
+
+
+    document
+        .getElementById("roastText")
+        .textContent =
+        '"' +
+        display +
+        '"';
+
+
+    document
+        .getElementById("source")
+        .textContent =
+        "ROAST MUTATION LEVEL " +
+        mutationLevel;
+
+
+    playAuntyVoice(
+        audio
+    );
+}
+
+
+/* =========================================================
+   INFECT FAMILY GROUP
+========================================================= */
+
+function infectFamily() {
+
+    if (
+        "speechSynthesis" in window
+    ) {
+
+        window
+            .speechSynthesis
+            .cancel();
+    }
+
+
+    hideMascots();
+
+
+    showScreen(
+        "familyScreen"
+    );
+
+
+    showFamilyMascot();
+
+
+    /*
+       Aunty enters the family group.
+    */
+
+    setTimeout(() => {
+
+        playAuntyVoice(
+
+            "എല്ലാരും അറിഞ്ഞോ? നമ്മുടെ കുട്ടി എന്തോ വലിയ സംഭവം ചെയ്തിട്ടുണ്ട്. ഡീറ്റെയിൽസ് ഒന്നും അറിയില്ല. പക്ഷേ സ്റ്റാറ്റസ് ഇട്ടിരുന്നു."
+
+        );
+
+    }, 500);
+}
+
+
+/* =========================================================
+   RETURN TO RESULT
+========================================================= */
+
+function returnToResult() {
+
+    showScreen(
+        "resultScreen"
+    );
+
+    showResultMascot();
+}
+
+
+/* =========================================================
+   CTRL + ENTER
+========================================================= */
+
+document
+    .getElementById("achievement")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.ctrlKey &&
+                event.key === "Enter"
+            ) {
+
+                startScan();
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
