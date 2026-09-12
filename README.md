@@ -1,4 +1,4 @@
-![alt text](image.png)
+![alt text](images/644430708-8920b256-2ba8-4988-b824-5351134eb4bd.png)
 # [Project Name] : Aunty-Virus
 
 ## Basic Details
