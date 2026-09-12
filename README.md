@@ -59,11 +59,9 @@ open index.html
 # Click 'Go Live' from the VS Code status bar
 
 Screenshots
-
-![alt text](<Screenshot 2026-09-12 085939-1.png>)
-![alt text](<Screenshot 2026-09-12 090517.png>)
-![alt text](<Screenshot 2026-09-12 090017.png>)
-![alt text](<Screenshot 2026-09-12 090059.png>)
-![alt text](<Screenshot 2026-09-12 090129.png>)
-![alt text](<Screenshot 2026-09-12 090150.png>)
-![alt text](<Screenshot 2026-09-12 090216.png>)
+![alt text](<images/WhatsApp Image 2026-09-12 at 10.29.11 AM (1).jpeg>)
+![alt text](<images/WhatsApp Image 2026-09-12 at 10.29.11 AM.jpeg>)
+![alt text](<images/WhatsApp Image 2026-09-12 at 10.29.12 AM (1).jpeg>)
+![alt text](<images/WhatsApp Image 2026-09-12 at 10.29.12 AM (2).jpeg>)
+![alt text](<images/WhatsApp Image 2026-09-12 at 10.29.12 AM (2).jpeg>)
+images/WhatsApp Image 2026-09-12 at 10.29.12 AM.jpeg
